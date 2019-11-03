@@ -1,0 +1,39 @@
+{
+  "name": "janine-km-kinney-server",
+  "version": "1.0.0",
+  "description": "Server code for JanineKmKinney.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest test/unit",
+    "test:integration": "jest test/integration",
+    "eslint": "eslint",
+    "lint": "eslint . --fix",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lreading/JanineKmKinney.com.git"
+  },
+  "author": "Leo Reading",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lreading/JanineKmKinney.com/issues"
+  },
+  "homepage": "https://github.com/lreading/JanineKmKinney.com#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}
