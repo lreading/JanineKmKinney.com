@@ -4,9 +4,10 @@
   "description": "Server code for JanineKmKinney.com",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:unit": "jest test/unit",
-    "test:integration": "jest test/integration",
+    "test": "NODE_ENV=testing jest --no-cache",
+    "test:unit": "npm run test -- test/unit",
+    "test:integration": "npm run test -- test/integration",
+    "test:tdd": "npm run test:unit -- --watch",
     "eslint": "eslint",
     "lint": "eslint . --fix",
     "start": "node index.js"
@@ -22,7 +23,10 @@
   },
   "homepage": "https://github.com/lreading/JanineKmKinney.com#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.12.1",
     "winston": "^3.2.1"
   },
   "devDependencies": {

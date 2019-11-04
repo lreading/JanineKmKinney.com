@@ -48,6 +48,12 @@ const consoleFormat = winston.format.combine(
 	winston.format.simple()
 );
 
+/**
+ * Determines if we should keep the logging silent
+ * @type {boolean}
+ */
+const silent = process.env.NODE_ENV === 'testing';
+
 winston.addColors(config.colors);
 
 module.exports = winston.createLogger({
@@ -55,9 +61,9 @@ module.exports = winston.createLogger({
 	levels: config.levels,
 	format: logfileFormat,
 	transports: [
-		new winston.transports.Console({ format: consoleFormat }),
-		new winston.transports.File({ filename: 'error.log', level: 'error', handleExceptions: true }),
-		new winston.transports.File({ filename: 'combined.log' })
+		new winston.transports.Console({ format: consoleFormat, silent }),
+		new winston.transports.File({ filename: 'error.log', level: 'error', handleExceptions: true, silent }),
+		new winston.transports.File({ filename: 'combined.log', silent })
 	],
 	exitOnError: false
 });
