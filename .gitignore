@@ -2,3 +2,5 @@ node_modules
 **/*.log
 **/dist/**/*
 **/.env
+**/.test_setup
+**/.test_secrets

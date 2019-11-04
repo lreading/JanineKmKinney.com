@@ -1,14 +1,14 @@
 CREATE TABLE Users
 (
     Id SERIAL PRIMARY KEY,
-    Usersname VARCHAR(50) NOT NULL UNIQUE,
+    Username VARCHAR(50) NOT NULL UNIQUE,
     PasswordHash VARCHAR(128) NOT NULL,
     Salt VARCHAR(128) NOT NULL,
     LastLogin TIMESTAMP NOT NULL,
     FailedAttempts INT NOT NULL,
     LastFailedAttempt TIMESTAMP NULL
 );
-CREATE INDEX users_name_idx ON Users(Usersname);
+CREATE INDEX users_name_idx ON Users(Username);
 
 CREATE TABLE Page
 (

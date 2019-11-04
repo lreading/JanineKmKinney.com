@@ -29,16 +29,22 @@ const validateName = (secret) => {
 const get = (secret) => {
 	try {
 		const safeName = validateName(secret);
-		const secretFile = `/var/secrets/${safeName}`;
+		const secretFile = `/run/secrets/${safeName}`;
         
 		// Always check for docker secrets before checking the node env
 		if (!fs.existsSync(secretFile)) {
 			return process.env[safeName] || '';
 		}
 
-		return fs.readFileSync(secretFile);
+		const val = fs.readFileSync(secretFile).toString('utf8');
+		// Special case for any variable encased in double-quotes:
+		const matches = val.match(/"(.*?)"/);
+		return matches
+		  ? matches[1]
+		  : val;
 	} catch (e) {
 		logger.error(`Error reading secret for ${secret}`);
+		logger.debug(e);
 		return '';
 	}
 };

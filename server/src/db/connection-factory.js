@@ -16,7 +16,7 @@ let pool;
  * Creates the database pool and establishes a connection
  * to the database
  */
-const connect = () => {
+const connect = () => {	
 	pool = new Pool({
 		user: secrets.get('POSTGRES_USER'),
 		password: secrets.get('POSTGRES_PASSWORD'),

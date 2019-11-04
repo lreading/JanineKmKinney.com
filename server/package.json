@@ -10,7 +10,7 @@
     "test:tdd": "npm run test:unit -- --watch",
     "eslint": "eslint",
     "lint": "eslint . --fix",
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",

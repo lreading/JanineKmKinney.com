@@ -39,7 +39,21 @@ const getByNameAsync = async (tableName, name) => {
 	return await getSingleOrNull(query, [name]);
 };
 
+/**
+ * 
+ * @param {string} sql
+ * @param {object[]} args
+ * @returns {object}
+ */
+const queryMultipleAsync = async (sql, args) => {
+	const connection = connectionFactory.get();
+	const res = await connection.query(sql, args);
+	return res.rows;
+};
+
 module.exports = {
 	getByIdAsync,
 	getByNameAsync,
+	getSingleOrNull,
+	queryMultipleAsync
 };
