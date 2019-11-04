@@ -40,8 +40,8 @@ const get = (secret) => {
 		// Special case for any variable encased in double-quotes:
 		const matches = val.match(/"(.*?)"/);
 		return matches
-		  ? matches[1]
-		  : val;
+			? matches[1]
+			: val;
 	} catch (e) {
 		logger.error(`Error reading secret for ${secret}`);
 		logger.debug(e);
