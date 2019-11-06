@@ -13,8 +13,8 @@ const baseUrl = process.env.BASE_URL ? process.env.BASE_URL : 'http://localhost:
  * @returns {string}
  */
 const getAlphaNumericChar = () => {
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    return chars[Math.floor(Math.random() * chars.length)];
+	const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	return chars[Math.floor(Math.random() * chars.length)];
 };
 
 /**
@@ -23,14 +23,14 @@ const getAlphaNumericChar = () => {
  * @returns {string}
  */
 const getRandomUsername = (length) => {
-    let username = '';
-    for (let i = 0; i < length; i++) {
-        username += getAlphaNumericChar();
-    }
-    return username;
+	let username = '';
+	for (let i = 0; i < length; i++) {
+		username += getAlphaNumericChar();
+	}
+	return username;
 };
 
 module.exports = {
-    baseUrl,
-    getRandomUsername
+	baseUrl,
+	getRandomUsername
 };
