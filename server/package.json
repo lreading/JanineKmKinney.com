@@ -6,11 +6,12 @@
   "scripts": {
     "test": "NODE_ENV=testing jest --no-cache",
     "test:unit": "npm run test -- test/unit",
-    "test:integration": "npm run test -- test/integration",
+    "test:integration": "cd ../dev && ./testSetup.sh && cd ../server && npm run test -- test/integration",
     "test:tdd": "npm run test:unit -- --watch",
     "eslint": "eslint",
     "lint": "eslint . --fix",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "foo": "NODE_ENV=testing jest --no-cache test/integration"
   },
   "repository": {
     "type": "git",

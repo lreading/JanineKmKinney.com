@@ -1,7 +1,6 @@
 /**
  * @name index.js
- * @description Entry-point for server application.
- * Starts an express server
+ * @description Starts an express application
  */
 const path = require('path');
 

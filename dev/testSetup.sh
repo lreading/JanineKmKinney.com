@@ -13,6 +13,7 @@ rm -f .env
 # Create a new database container that will automagically add a test user for us
 cp ../database/Dockerfile $TEST_SETUP_DIR
 cp -r ../database/scripts $TEST_SETUP_DIR/scripts
+cp ../database/docker-healthcheck $TEST_SETUP_DIR
 cp test-db/*.sql $TEST_SETUP_DIR/scripts
 
 # Copy the environment variables from THIS user's .env file in /server,
@@ -41,3 +42,5 @@ echo "TEST_SETUP_DIR=$TEST_SETUP_DIR" >> .env
 # Start the docker containers
 docker-compose build
 docker-compose up -d
+
+# TODO: Wait until containers are healthy
