@@ -42,5 +42,3 @@ echo "TEST_SETUP_DIR=$TEST_SETUP_DIR" >> .env
 # Start the docker containers
 docker-compose build
 docker-compose up -d
-
-# TODO: Wait until containers are healthy
