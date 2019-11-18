@@ -9,11 +9,8 @@ There is a defaults.env file used as a template to populate your own secrets.  W
 Generating a psuedo-random key: node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
 
 ## TODO:
-- Find a way of adding IP address logging to Winston (specifically for audit logs)
 - Consider creating an IP ban mechanism?
 - Add CSRF protection
-- Implement login flow
-- Implement lockout
 - Iplement password reset
 - Remove the register endpoints from production
 - Create a way of adding a user after the env is stood up (maybe a one-off script inside the docker container?)

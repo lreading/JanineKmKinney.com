@@ -46,9 +46,12 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', express.static(path.join(__dirname, staticFilesDir)));
 // TODO: Add static path for index.html file (SPA)
-
+// TODO: Add CSRF Protection
+// TODO: Add default security headers
 // TODO: Add modules to express as needed
-// TODO:: Add routes as needed
+// TODO: Add routes as needed
+// TODO: Add some kind of default timeout
+// TODO: Add global error handling
 app.use('/api', api);
 
 app.listen(port, () => logger.info(`Server started at http://localhost:${port}/`));
