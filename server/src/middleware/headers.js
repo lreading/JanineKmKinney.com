@@ -16,7 +16,9 @@ const addHeaders = (req, res, next) => {
     res.set('X-XSS-Protection', '1; mode=block');
     res.set('X-Content-Type-Options', 'nosniff');
     res.set('X-Powered-By', 'Janine KM Kinney');
-    next();
+    if (next) {
+        next();
+    }
 };
 
 module.exports = addHeaders;

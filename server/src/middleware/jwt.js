@@ -10,6 +10,7 @@ const logger = require('../util/logger.js').child({ label: 'middleware/jwt.js'})
  * Checks the JWT token that was passed to ensure that the user is authenticated and authorized
  * @param {object} req
  * @param {object} res
+ * @param {function} next
  */
 const checkToken = (req, res, next) => {
 	const authHeader = req.headers['authorization'];
