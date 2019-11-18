@@ -12,13 +12,13 @@
  * @param {function?} next
  */
 const addHeaders = (req, res, next) => {
-    res.set('X-Frame-Options', 'SAMEORIGIN');
-    res.set('X-XSS-Protection', '1; mode=block');
-    res.set('X-Content-Type-Options', 'nosniff');
-    res.set('X-Powered-By', 'Janine KM Kinney');
-    if (next) {
-        next();
-    }
+	res.set('X-Frame-Options', 'SAMEORIGIN');
+	res.set('X-XSS-Protection', '1; mode=block');
+	res.set('X-Content-Type-Options', 'nosniff');
+	res.set('X-Powered-By', 'Janine KM Kinney');
+	if (next) {
+		next();
+	}
 };
 
 module.exports = addHeaders;
