@@ -5,6 +5,7 @@
 const express = require('express');
 
 const errorResponses = require('../responses/error.js');
+const jwt = require('../middleware/jwt.js');
 const logger = require('../util/logger.js').child({ label: 'api/users.js' });
 const userService = require('../service/user.js');
 const userRepo = require('../repo/users.js'); 
@@ -34,7 +35,7 @@ const getById = async (req, res) => {
 		logger.audit(`Attempting to get non-existing user with id ${req.params.userId}`);
 		return errorResponses.notFound(res);
 	}
-	res.json(userRepo.sanitizeUser(user));
+	res.json(userService.sanitizeUser(user));
 };
 
 const post = async (req, res) => {
@@ -70,6 +71,6 @@ router.get('/', (req, res) => errorResponses.notFound(res));
 router.delete('/:userId', (req, res) => errorResponses.notFound(res));
 router.put('/:userId', (req, res) => errorResponses.notFound(res));
 router.post('/', post);
-router.get('/:userId', getById);
+router.get('/:userId', jwt, getById);
 
 module.exports = router;
