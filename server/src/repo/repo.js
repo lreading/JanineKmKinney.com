@@ -51,9 +51,21 @@ const queryMultipleAsync = async (sql, args) => {
 	return res.rows;
 };
 
+/**
+ * Runs an async query
+ * @param {string} sql
+ * @param {object[]} args
+ * @returns {Promise}
+ */
+const queryAsync = async (sql, args) => {
+	const connection = connectionFactory.get();
+	await connection.query(sql, args);
+};
+
 module.exports = {
 	getByIdAsync,
 	getByNameAsync,
 	getSingleOrNull,
+	queryAsync,
 	queryMultipleAsync
 };

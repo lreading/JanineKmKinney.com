@@ -7,6 +7,7 @@ const router = express.Router({ mergeParams: true });
 
 const errorResponses = require('../responses/error.js');
 const users = require('./users.js');
+const token = require('./token.js');
 
 /**
  * Return a 404 for the /api endpoint
@@ -16,5 +17,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/users', users);
+router.use('/', token);
 
 module.exports = router;

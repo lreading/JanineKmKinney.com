@@ -27,4 +27,11 @@ describe('repo/repo.js', () => {
 		const expectedSql = `SELECT * FROM ${tableName} WHERE Name = $1`;
 		expect(mockPool.query).toHaveBeenCalledWith(expectedSql, [name]);
 	});
+
+	it('Performs an arbitrary query', async () => {
+		const expectedSql = 'UPDATE Foo SET Bar = $1 WHERE Id = $2';
+		const args = ['test', 55];
+		await repo.queryAsync(expectedSql, args);
+		expect(mockPool.query).toHaveBeenCalledWith(expectedSql, args);
+	});
 });

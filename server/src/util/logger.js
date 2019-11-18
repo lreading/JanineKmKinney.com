@@ -63,6 +63,7 @@ module.exports = winston.createLogger({
 	transports: [
 		new winston.transports.Console({ format: consoleFormat, silent }),
 		new winston.transports.File({ filename: 'error.log', level: 'error', handleExceptions: true, silent }),
+		new winston.transports.File({ filename: 'audit.log', level: 'audit', handleExceptions: true, silent }),
 		new winston.transports.File({ filename: 'combined.log', silent })
 	],
 	exitOnError: false

@@ -51,9 +51,4 @@ app.use('/', express.static(path.join(__dirname, staticFilesDir)));
 // TODO:: Add routes as needed
 app.use('/api', api);
 
-// TODO: Set client secret for JWT
-
-// TODO: Remove
-app.get('/', (req, res) => res.json({ status: 200, message: 'Hello, world!' }));
-
 app.listen(port, () => logger.info(`Server started at http://localhost:${port}/`));

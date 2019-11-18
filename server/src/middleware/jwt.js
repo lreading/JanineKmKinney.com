@@ -2,10 +2,8 @@
  * @name jwt.js
  * @description JWT validation middleware
  */
-
-const jwt = require('jsonwebtoken');
-
 const errors = require('../responses/error.js');
+const jwt = require('../service/jwt.js');
 const logger = require('../util/logger.js').child({ label: 'middleware/jwt.js'});
 
 /**
@@ -24,18 +22,13 @@ const checkToken = (req, res) => {
 		return errors.badRequest('Invalid bearer token format.');
 	}
 
-	try {
-		// TODO: 
-		//      - Add JWT_SECRET_KEY to defaults.env
-		//      - Add JWT_SECRET_KEY to .env
-		//      - Add JWT_SECRET_KEY to app
-		const decoded = jwt.verify(splitToken[1], req.app.get('SOME SECRET KEY'));
-		req.decoded = decoded;
-	} catch (e) {
-		logger.error('Exception caught while attempting to verify JWT.');
-		logger.audit('Filed JWT decoding.', e);
+	const token = jwt.getValidatedToken(splitToken[1]);
+	if (!token) {
+		logger.warn('Attempt to use an invalid token caught.');
 		return errors.forbidden(res);
 	}
+
+	req.jwt = token;
 };
 
 module.exports = checkToken;

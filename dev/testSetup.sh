@@ -14,7 +14,6 @@ rm -f .env
 cp ../database/Dockerfile $TEST_SETUP_DIR
 cp -r ../database/scripts $TEST_SETUP_DIR/scripts
 cp ../database/docker-healthcheck $TEST_SETUP_DIR
-cp test-db/*.sql $TEST_SETUP_DIR/scripts
 
 # Copy the environment variables from THIS user's .env file in /server,
 # and expand them into individual files in the test secrets dir
@@ -39,6 +38,14 @@ done
 # Tell docker-compose where the test setup dir is
 echo "TEST_SETUP_DIR=$TEST_SETUP_DIR" >> .env
 
-# Start the docker containers
-docker-compose build
-docker-compose up -d
+if [ -z `docker ps -q --no-trunc | grep $(docker-compose ps -q api)` ]; then
+    # Not already running... Start the docker containers
+    docker-compose build
+    docker-compose up -d
+else
+    # Kill containers first and re-start them
+    docker-compose down
+    docker-compose build
+    docker-compose up -d
+fi
+

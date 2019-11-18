@@ -6,6 +6,7 @@ const express = require('express');
 
 const errorResponses = require('../responses/error.js');
 const logger = require('../util/logger.js').child({ label: 'api/users.js' });
+const userService = require('../service/user.js');
 const userRepo = require('../repo/users.js'); 
 const validators = require('../util/validators.js');
 
@@ -38,21 +39,31 @@ const getById = async (req, res) => {
 
 const post = async (req, res) => {
 	if (!req.body) {
-		console.log(req.body);
 		return errorResponses.badRequest(res, 'User object required.');
 	}
 
-	validators.validateRequiredString(req.body.username, 'username', 1, 49);
-	// TODO: Validate password property
-	// TODO: implement crypto (hash + salt)
+	const username = req.body.username;
+	const password = req.body.password;
 
-	const id = await userRepo.addAsync(req.body.username, 'hash browns', 'salty fries');
-	const user = await userRepo.getByIdAsync(id);
-	if (!user) {
-		logger.error('Unknown error while creating user.');
-		return errorResponses.internalServerError(res);
+	try {
+		validators.validateRequiredString(username, 'username', 1, 49);
+	} catch (e) {
+		return errorResponses.badRequest(res, e.message);
 	}
-	res.json(userRepo.sanitizeUser(user));
+
+	if (!userService.doesPasswordMeetRequirements(password)) {
+		return errorResponses.badRequest(res, 'Passwords must be at least 8 characters, and have at least 1 uppercase, 1 lowercase and 1 special character.');
+	}
+
+
+	const existingUser = await userRepo.getByNameAsync(username);
+	if (existingUser) {
+		logger.audit(`User already exists with username ${username}`);
+		return errorResponses.badRequest(res, 'Username unavailable.');
+	}
+
+	const user = await userService.createUserAsync(username, password);
+	res.json(user);
 };
 
 router.get('/', (req, res) => errorResponses.notFound(res));
