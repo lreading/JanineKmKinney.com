@@ -16,7 +16,8 @@ router.get('/', (req, res) => {
 	return errorResponses.notFound(res);
 });
 
-router.use('/users', users);
 router.use('/', token);
+router.use('/users', users);
+// TODO: Add auth middleware
 
 module.exports = router;

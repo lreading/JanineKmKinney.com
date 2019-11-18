@@ -7,9 +7,10 @@ const path = require('path');
 const dotenv = require('dotenv');
 const express = require('express');
 
-const db = require('./db/connection-factory.js');
-const logger = require('./util/logger').child({ label: 'index.js' });
 const api = require('./api/routes.js');
+const db = require('./db/connection-factory.js');
+const headers = require('./middleware/headers.js');
+const logger = require('./util/logger').child({ label: 'index.js' });
 
 /**
  * The port that the server listens on
@@ -41,15 +42,12 @@ dotenv.config();
 // Establish a connection to the database
 db.connect();
 
+app.use(headers);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/', express.static(path.join(__dirname, staticFilesDir)));
 // TODO: Add static path for index.html file (SPA)
-// TODO: Add CSRF Protection
-// TODO: Add default security headers
-// TODO: Add modules to express as needed
-// TODO: Add routes as needed
 // TODO: Add some kind of default timeout
 // TODO: Add global error handling
 app.use('/api', api);

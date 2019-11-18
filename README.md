@@ -10,7 +10,6 @@ Generating a psuedo-random key: node -e "console.log(require('crypto').randomByt
 
 ## TODO:
 - Consider creating an IP ban mechanism?
-- Add CSRF protection
 - Iplement password reset
 - Remove the register endpoints from production
 - Create a way of adding a user after the env is stood up (maybe a one-off script inside the docker container?)

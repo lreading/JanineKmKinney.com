@@ -11,7 +11,7 @@ const logger = require('../util/logger.js').child({ label: 'middleware/jwt.js'})
  * @param {object} req
  * @param {object} res
  */
-const checkToken = (req, res) => {
+const checkToken = (req, res, next) => {
 	const authHeader = req.headers['authorization'];
 	if (!authHeader) {
 		return errors.forbidden(res);
@@ -29,6 +29,9 @@ const checkToken = (req, res) => {
 	}
 
 	req.jwt = token;
+	if (next) {
+		next();
+	}
 };
 
 module.exports = checkToken;
