@@ -11,8 +11,10 @@ Generating a psuedo-random key: node -e "console.log(require('crypto').randomByt
 ## TODO:
 - Consider creating an IP ban mechanism?
 - Iplement password reset
+- Implement haveibeenpwned API for passwords?
 - Remove the register endpoints from production
 - Create a way of adding a user after the env is stood up (maybe a one-off script inside the docker container?)
+- Create APIs for page / page sections
 
 ## Tests
 Unit tests are written using jest, integration tests are written using jest/supertest.
@@ -24,3 +26,4 @@ There is a helper script to start the databse locally.  Ensure that you have you
 
 # Site
 TODO
+- Be sure to include a CC Attribution 4.0 referencing haveibeenpwned for anything checking passwords

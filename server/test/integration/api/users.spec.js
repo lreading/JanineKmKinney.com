@@ -3,7 +3,8 @@ const request = require('supertest');
 const utils = require('../utils.js');
 
 describe('users endpoint', () => {
-	const validPass = 'Sup3rS3cure!';
+	// No guarantee that this will not be in the HIBP DB... Unlikely that we'd get a match though
+	const validPass = utils.getRandomUsername(10) + 'R2%$#';
 
 	it('creates a new user', async () => {
 		const res = await request(utils.baseUrl)
@@ -36,7 +37,6 @@ describe('users endpoint', () => {
 	});
 
 	it('returns a 400 if an invalid password is provided', async () => {
-
 		const res = await request(utils.baseUrl)
 			.post('/users')
 			.send({
@@ -64,6 +64,17 @@ describe('users endpoint', () => {
 			});
 		expect(res.statusCode).toEqual(400);
 		expect(res.body.message).toEqual('Username unavailable.');
+	});
+
+	it('returns a 400 if using a pwned password', async () => {
+		const res = await request(utils.baseUrl)
+			.post('/users')
+			.send({
+				username: utils.getRandomUsername(12),
+				password: 'Password123!' // pwned password
+			});
+		expect(res.statusCode).toEqual(400);
+		expect(res.body.message).toContain('Passwords');
 	});
 
 	describe('users/get', () => {

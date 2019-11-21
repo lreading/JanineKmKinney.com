@@ -5,6 +5,7 @@
 const express = require('express');
 
 const errorResponses = require('../responses/error.js');
+const hibp = require('../service/hibp.js');
 const jwt = require('../middleware/jwt.js');
 const logger = require('../util/logger.js').child({ label: 'api/users.js' });
 const userService = require('../service/user.js');
@@ -18,7 +19,6 @@ const validators = require('../util/validators.js');
 const router = express.Router({ mergeParams: true });
 
 // TODO: Consider removing this entire resource, we may not need it for the actual application.
-// TODO: Add auth middleware here
 
 /**
  * Gets a user by their id
@@ -56,6 +56,11 @@ const post = async (req, res) => {
 		return errorResponses.badRequest(res, 'Passwords must be at least 8 characters, and have at least 1 uppercase, 1 lowercase and 1 special character.');
 	}
 
+	const pwHasBeenPwned = await hibp.hasPasswordBeenPwned(password);
+	if (pwHasBeenPwned) {
+		logger.audit('Attempt to use pwned password has been blocked.');
+		return errorResponses.badRequest(res, 'This password has been found in an online breach and should be considered compromised.  Please select a different password. Data courtesy of https://haveibeenpwned.com/Passwords');
+	}
 
 	const existingUser = await userRepo.getByNameAsync(username);
 	if (existingUser) {

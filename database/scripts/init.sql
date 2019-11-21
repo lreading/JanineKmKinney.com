@@ -38,4 +38,3 @@ CREATE TABLE Page_Section
 );
 CREATE INDEX page_section_name_idx ON Page_Section(Name);
 CREATE INDEX page_section_pageid_idx ON Page_Section(PageId);
-
