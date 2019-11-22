@@ -4,10 +4,10 @@
   "description": "Server code for JanineKmKinney.com",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=testing jest --no-cache",
-    "test:unit": "npm run test -- test/unit",
-    "test:integration:start": "cd ../dev && ./testSetup.sh && cd ../server && npm run test -- test/integration",
-    "test:integration": "npm run test -- test/integration",
+    "test": "NODE_ENV=testing mocha",
+    "test:unit": "npm run test -- test/unit/**/*.spec.js",
+    "test:integration:start": "cd ../dev && ./testSetup.sh && cd ../server && npm run test -- test/integration/**/*.spec.js",
+    "test:integration": "npm run test -- test/integration/**/*.spec.js",
     "test:tdd": "npm run test:unit -- --watch",
     "eslint": "eslint",
     "lint": "eslint . --fix",
@@ -34,18 +34,11 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^6.6.0",
-    "jest": "^24.9.0",
+    "mocha": "^6.2.2",
+    "sinon": "^7.5.0",
+    "sinon-chai": "^3.3.0",
     "supertest": "^4.0.2"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "globalSetup": "./test/globalSetup.js",
-    "modulePaths": [
-      "<rootDir>"
-    ]
   }
 }

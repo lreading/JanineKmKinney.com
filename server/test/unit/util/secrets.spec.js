@@ -1,19 +1,26 @@
 const fs = require('fs');
 
+const expect = require('chai').expect;
+const sinon = require('sinon');
+
 const secrets = require('../../../src/util/secrets.js');
 
 describe('util/secrets.js', () => {
+	let sandbox;
+	beforeEach(() => {
+		sandbox = sinon.createSandbox();
+	});
+
+	afterEach(() => {
+		sandbox.restore();
+	});
+
 	describe('process.env', () => {
 		const oldEnv = process.env;
 
 		beforeEach(() => {
-			jest.resetModules();
 			process.env = { ...oldEnv };
 			delete process.env.NODE_ENV;
-		});
-    
-		afterEach(() => {
-			process.env = oldEnv;
 		});
     
 		it('gets a process env variable as a secret', () => {
@@ -21,11 +28,11 @@ describe('util/secrets.js', () => {
 			const val = 'test';
 			process.env[name] = val;
     
-			expect(secrets.get(name)).toEqual(val);
+			expect(secrets.get(name)).to.eql(val);
 		});
     
 		it('does not return an error when there is no secret', () => {
-			expect(secrets.get('fake')).toEqual('');
+			expect(secrets.get('fake')).to.eql('');
 		});
     
 		it('returns nothing with an invalid name', () => {
@@ -33,7 +40,7 @@ describe('util/secrets.js', () => {
 			const val = 'test';
 			process.env[name] = val;
     
-			expect(secrets.get(name)).toEqual('');
+			expect(secrets.get(name)).to.eql('');
 		});
 	});
 
@@ -42,20 +49,17 @@ describe('util/secrets.js', () => {
 		const val = 'test';
 
 		beforeEach(() => {
-			jest.resetModules();
-			jest.spyOn(fs, 'existsSync');
-			fs.existsSync.mockReturnValue(true);
-			jest.spyOn(fs, 'readFileSync');
-			fs.readFileSync.mockReturnValue(val);
+			sandbox.stub(fs, 'existsSync').returns(true);
+			sandbox.stub(fs, 'readFileSync').returns(val);
 		});
 
 		it('gets a secret from docker secrets', () => {
-			expect(secrets.get(name)).toEqual(val);
+			expect(secrets.get(name)).to.eql(val);
 		});
     
 		it('prefers docker secrets over node environment variables', () => {
 			process.env[name] = 'BAD_VAL';
-			expect(secrets.get(name)).toEqual(val);
+			expect(secrets.get(name)).to.eql(val);
 		});
 	});
 });

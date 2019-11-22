@@ -1,3 +1,5 @@
+const expect = require('chai').expect;
+
 const audit = require('../../../src/util/audit.js');
 
 describe('util/audit.js', () => {
@@ -11,7 +13,7 @@ describe('util/audit.js', () => {
 				}
 			};
 			const res = audit.getIpAddress(req);
-			expect(res).toEqual(ipAddr);
+			expect(res).to.eql(ipAddr);
 		});
 
 		it('gets the ip from the connection', () => {
@@ -21,23 +23,23 @@ describe('util/audit.js', () => {
 				}
 			};
 			const res = audit.getIpAddress(req);
-			expect(res).toEqual(ipAddr);
+			expect(res).to.eql(ipAddr);
 		});
 
 		it('handles null requests', () => {
 			const res = audit.getIpAddress(null);
-			expect(res).toEqual('');
+			expect(res).to.eql('');
 		});
 
 		it('handles undefined requests', () => {
 			const res = audit.getIpAddress(undefined);
-			expect(res).toEqual('');
+			expect(res).to.eql('');
 		});
 
 		it('returns an empty string when no addresses are found', () => {
 			const req = {};
 			const res = audit.getIpAddress(req);
-			expect(res).toEqual('');
+			expect(res).to.eql('');
 		});
 	});
 });

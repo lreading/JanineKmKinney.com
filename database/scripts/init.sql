@@ -13,7 +13,7 @@ CREATE TABLE Page
 (
     Id SERIAL PRIMARY KEY,
     Name VARCHAR(50) NOT NULL UNIQUE,
-    CreateByUsersId INT NOT NULL,
+    CreateByUserId INT NOT NULL,
     CreatedAt TIMESTAMP NOT NULL,
     UpdatedAt TIMESTAMP NULL
 );
@@ -24,12 +24,12 @@ CREATE TABLE Page_Section
     Id SERIAL PRIMARY KEY,
     Name VARCHAR(50) NOT NULL UNIQUE,
     CreatedAt TIMESTAMP NOT NULL,
-    CreatedByUsersId INT NOT NULL,
+    CreatedByUserId INT NOT NULL,
     Title VARCHAR(200) NULL,
     Subtitle VARCHAR(200) NULL,
     Content TEXT NULL,
     PageId INT NOT NULL,
-    CONSTRAINT page_section_createdbyUsersid_fkey FOREIGN KEY (CreatedByUsersId)
+    CONSTRAINT page_section_createdbyUserid_fkey FOREIGN KEY (CreatedByUserId)
         REFERENCES Users(Id) MATCH SIMPLE
         ON UPDATE NO ACTION ON DELETE NO ACTION,
     CONSTRAINT page_section_pageid_fkey FOREIGN KEY (PageId)

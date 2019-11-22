@@ -1,36 +1,47 @@
+const expect = require('chai').expect;
 const jsonwebtoken = require('jsonwebtoken');
+const sinon = require('sinon');
 
 const jwt = require('../../../src/service/jwt.js');
+const secrets = require('../../../src/util/secrets.js');
 
 describe('service/jwt.js', () => {
+	let sandbox;
+	let secretStub;
+	let token;
 	const user = {
 		id: 23,
 		username: 'testuser'
 	};
 
-	describe('createJwtAsync', () => {
-		it('generates a new key as a string', async () => {
-			const token = await jwt.createJwtAsync(user);
-			expect(typeof token).toEqual('string');
-			expect(token.length).toBeGreaterThan(1);
-		});
+	beforeEach(async () => {
+		sandbox = sinon.createSandbox();
+		secretStub = sandbox.stub(secrets, 'get');
+		secretStub.withArgs('JWT_SECRET_KEY').returns('JIBBERISH');
+		secretStub.withArgs('JWT_EXPIRATION').returns('1h');
+		
+		token = await jwt.createJwtAsync(user);
+	});
+
+	afterEach(() => {
+		sandbox.restore();
+	});
+
+	it('generates a new key as a string', async () => {
+		expect(token).to.be.a('string');
+		expect(token).to.have.length.greaterThan(1);
 	});
 
 	describe('getValidatedToken', () => {
-		let token;
-		beforeEach(async () => {
-			token = await jwt.createJwtAsync(user);
-		});
-        
 		it('gets the decoded JWT', () => {
 			const decoded = jwt.getValidatedToken(token);
-			expect(decoded.user).toEqual(user);
+			expect(decoded.user).to.eql(user);
 		});
 
 		it('fails validation with a bad secret', () => {
 			const badTokenString = jsonwebtoken.sign(JSON.stringify(user), 'bad key');
 			const decoded = jwt.getValidatedToken(badTokenString);
-			expect(decoded).toBeNull();
+			expect(decoded).to.be.null;
 		});
 
 		it('fails validation if the token has been tampered with', () => {
@@ -42,18 +53,17 @@ describe('service/jwt.js', () => {
 			const newToken = `${tokenParts[0]}.${newBodyString}.${tokenParts[2]}`;
 
 			const decoded = jwt.getValidatedToken(newToken);
-			expect(decoded).toBeNull();
+			expect(decoded).to.be.null;
 		});
 
 		it('fails validation if the token is expired', async () => {
-			process.env.JWT_EXPIRATION = '50ms';
+			secretStub.withArgs('JWT_EXPIRATION').returns('15ms');
 			const shortToken = await jwt.createJwtAsync(user);
 			const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-			await sleep(75);
+			await sleep(20);
 
 			const decoded = jwt.getValidatedToken(shortToken);
-			expect(decoded).toBeNull();
-			process.env.JWT_EXPIRATION = '12h';
+			expect(decoded).to.be.null;
 		});
 	});
 });

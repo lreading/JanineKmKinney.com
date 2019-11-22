@@ -1,17 +1,25 @@
+const expect = require('chai').expect;
 const jsonwebtoken = require('jsonwebtoken');
+const sinon = require('sinon');
 
 const errors = require('../../../src/responses/error.js');
 const jwt = require('../../../src/middleware/jwt.js');
 const secrets = require('../../../src/util/secrets.js');
 
 describe('middleware/jwt.js', () => {
+	let sandbox;
+	let forbiddenStub, badRequestStub;
+
 	beforeEach(() => {
-		jest.resetAllMocks();
+		sandbox = sinon.createSandbox();
 		const errorMock = () => {};
-		jest.spyOn(errors, 'forbidden');
-		jest.spyOn(errors, 'badRequest');
-		errors.forbidden.mockImplementation(errorMock);
-		errors.badRequest.mockImplementation(errorMock);
+		forbiddenStub = sandbox.stub(errors, 'forbidden').returns(errorMock);
+		badRequestStub = sandbox.stub(errors, 'badRequest').returns(errorMock);
+		sandbox.stub(secrets, 'get').returns('ASDFASDFASDFASDF');
+	});
+
+	afterEach(() => {
+		sandbox.restore();
 	});
 
 	it('returns forbidden if there is no auth header', () => {
@@ -19,7 +27,7 @@ describe('middleware/jwt.js', () => {
 			headers: {}
 		};
 		jwt(req, {});
-		expect(errors.forbidden).toHaveBeenCalledTimes(1);
+		expect(forbiddenStub.called).to.be.true;
 	});
 
 	it('returns forbidden with a poorly formatted auth header', () => {
@@ -29,7 +37,7 @@ describe('middleware/jwt.js', () => {
 			}
 		};
 		jwt(req, {});
-		expect(errors.badRequest).toHaveBeenCalledTimes(1);
+		expect(badRequestStub.called).to.be.true;
 	});
 
 	it('returns forbidden with an invalid JWT', () => {
@@ -41,7 +49,7 @@ describe('middleware/jwt.js', () => {
 			}
 		};
 		jwt(req, {});
-		expect(errors.forbidden).toHaveBeenCalledTimes(1);
+		expect(forbiddenStub.called).to.be.true;
 	});
 
 	it('adds the JWT to the request object if successfully authenticated', () => {
@@ -53,6 +61,6 @@ describe('middleware/jwt.js', () => {
 			}
 		};
 		jwt(req, {});
-		expect(req.jwt).toEqual(obj);
+		expect(req.jwt).to.eql(obj);
 	});
 });

@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const request = require('supertest');
 
 const utils = require('../utils.js');
@@ -13,16 +14,16 @@ describe('users endpoint', () => {
 				username: utils.getRandomUsername(12),
 				password: validPass
 			});
-		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveProperty('id');
-		expect(res.body).toHaveProperty('username');
+		expect(res.statusCode).to.eql(200);
+		expect(res.body).to.have.property('id');
+		expect(res.body).to.have.property('username');
 	});
 
 	it('returns a 400 if no body is provided', async () => {
 		const res = await request(utils.baseUrl)
 			.post('/users');
-		expect(res.statusCode).toEqual(400);
-		expect(res.body.message).toContain('user');
+		expect(res.statusCode).to.eql(400);
+		expect(res.body.message).to.match(/user/);
 	});
 
 	it('returns a 400 if no username is provided', async () => {
@@ -31,9 +32,8 @@ describe('users endpoint', () => {
 			.send({
 				password: validPass
 			});
-		expect(res.statusCode).toEqual(400);
-		expect(res.body.message).toContain('username');
-
+		expect(res.statusCode).to.eql(400);
+		expect(res.body.message).to.match(/username/);
 	});
 
 	it('returns a 400 if an invalid password is provided', async () => {
@@ -43,8 +43,8 @@ describe('users endpoint', () => {
 				username: utils.getRandomUsername(12),
 				password: 'blah'
 			});
-		expect(res.statusCode).toEqual(400);
-		expect(res.body.message).toContain('Passwords');
+		expect(res.statusCode).to.eql(400);
+		expect(res.body.message).to.match(/Passwords/);
 	});
 
 	it('returns a 400 if trying to create a user that exists', async () => {
@@ -62,8 +62,8 @@ describe('users endpoint', () => {
 				username: username, 
 				password: validPass
 			});
-		expect(res.statusCode).toEqual(400);
-		expect(res.body.message).toEqual('Username unavailable.');
+		expect(res.statusCode).to.eql(400);
+		expect(res.body.message).to.eql('Username unavailable.');
 	});
 
 	it('returns a 400 if using a pwned password', async () => {
@@ -73,15 +73,15 @@ describe('users endpoint', () => {
 				username: utils.getRandomUsername(12),
 				password: 'Password123!' // pwned password
 			});
-		expect(res.statusCode).toEqual(400);
-		expect(res.body.message).toContain('Passwords');
+		expect(res.statusCode).to.eql(400);
+		expect(res.body.message).to.match(/Passwords/);
 	});
 
 	describe('users/get', () => {
 		const username = utils.getRandomUsername(12);
 		let token;
 
-		beforeAll(async () => {
+		before(async () => {
 			await utils.createUserAsync(username, validPass);
 		});
 
@@ -93,16 +93,16 @@ describe('users endpoint', () => {
 			const res = await request(utils.baseUrl)
 				.get('/users/1');
 
-			expect(res.statusCode).toEqual(403);
+			expect(res.statusCode).to.eql(403);
 		});
 	
 		it('gets a valid user', async () => {
 			const res = await request(utils.baseUrl)
 				.get('/users/1')
 				.set('Authorization', `Bearer ${token}`);
-			expect(res.statusCode).toEqual(200);
-			expect(res.body.id).toEqual(1);
-			expect(res.body.username.length).toBeGreaterThan(1);
+			expect(res.statusCode).to.eql(200);
+			expect(res.body.id).to.eql(1);
+			expect(res.body.username.length).to.be.greaterThan(1);
 		});
 	
 		it('returns a 404 when no user is found', async () => {
@@ -110,7 +110,7 @@ describe('users endpoint', () => {
 				.get('/users/999999999')
 				.set('Authorization', `Bearer ${token}`);
 
-			expect(res.statusCode).toEqual(404);
+			expect(res.statusCode).to.eql(404);
 		});
 	});
 });

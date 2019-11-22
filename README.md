@@ -17,7 +17,7 @@ Generating a psuedo-random key: node -e "console.log(require('crypto').randomByt
 - Create APIs for page / page sections
 
 ## Tests
-Unit tests are written using jest, integration tests are written using jest/supertest.
+Unit tests are written using mocha, chai and sinon, integration tests are written using mocha/supertest.
 All routes are tested with supertest as integration tests.
 The dev/testSetup.sh script will start an integration test server for you (requires docker / docker-compose)
 

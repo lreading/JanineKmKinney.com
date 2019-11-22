@@ -9,8 +9,8 @@
  * @param {Date} date
  */
 const validateDate = (name, date) => {
-	if (!date || Object.prototype.toString.call(date) !== '[object Date]'
-        || isNaN(date)) {
+	if (!date || (Object.prototype.toString.call(date) !== '[object Date]'
+        && isNaN(date))) {
 		throw new Error(`${name} is not a valid date.`);
 	}
 };
